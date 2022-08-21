@@ -3,7 +3,7 @@ import json
 # Modify to include fields that you want
 base_url = "https://bugzilla.mozilla.org/rest/bug?include_fields=id,resolution,creator,history,summary,comments&id="
 
-with open('bugs_id_lct_final.json') as json_file:
+with open('data\\bugs_id_lct_final.json') as json_file:
     data = json.load(json_file)
 
 urls = []
@@ -25,6 +25,6 @@ for i in range (0, size, 100):
 
 
 
-# An outfile that includes 100 urls that each one retrieves 100 bugs
-with open('urls_with_100ids_final.json', 'w') as outfile:
+# An outfile that includes multiple urls that each one retrieves 100 bugs
+with open('data\\urls_with_100ids_final.json', 'w') as outfile:
     json.dump(urls, outfile)

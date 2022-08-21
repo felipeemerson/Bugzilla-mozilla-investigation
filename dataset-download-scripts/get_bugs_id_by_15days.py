@@ -4,7 +4,7 @@ from datetime import datetime
 import pandas as pd
 
 # Set your Bugzilla API key
-API_KEY="GGINB0vYDLcNRXxKdmzoOLOYxQUOeSnANtStJxos"
+API_KEY="<YOUR BUGZILLA-API-KEY>"
 HEADERS = { "X-BUGZILLA-API-KEY": API_KEY }
 
 DATE_FORMAT = "%Y-%m-%d"
@@ -18,31 +18,31 @@ currentDate = INITIAL_DATE
 bugs = []
 
 while True:
-    currentDatePlusOffset = currentDate + pd.DateOffset(days=DAYS_OFFSET)
+  currentDatePlusOffset = currentDate + pd.DateOffset(days=DAYS_OFFSET)
 
-    if currentDatePlusOffset >= LAST_DATE:
-            if currentDate >= LAST_DATE:
-                break
+  if currentDatePlusOffset >= LAST_DATE:
+    if currentDate >= LAST_DATE:
+      break
 
-            currentDatePlusOffset = currentDate + (LAST_DATE - currentDate)
+    currentDatePlusOffset = currentDate + (LAST_DATE - currentDate)
 
 
-    url = "https://bugzilla.mozilla.org/rest/bug?include_fields=id,last_change_time&bug_status=RESOLVED&chfield=[Bug%20creation]&chfieldfrom=" + str(currentDate.date()) + "&chfieldto=" + str(currentDatePlusOffset.date())
-    
-    response = requests.get(
-        url,
-        headers=HEADERS
-    )
+  url = "https://bugzilla.mozilla.org/rest/bug?include_fields=id,last_change_time&bug_status=RESOLVED&chfield=[Bug%20creation]&chfieldfrom=" + str(currentDate.date()) + "&chfieldto=" + str(currentDatePlusOffset.date())
+  
+  response = requests.get(
+    url,
+    headers=HEADERS
+  )
 
-    data = response.json()
-    tempBugs = data['bugs']
-    bugs.extend(tempBugs)
+  data = response.json()
+  tempBugs = data['bugs']
+  bugs.extend(tempBugs)
 
-    print(f"Período: {currentDate} - {currentDatePlusOffset}, quant. de bugs: {len(tempBugs)}")
-    
-    currentDate = currentDatePlusOffset + pd.DateOffset(days=1)
+  print(f"Interval: {currentDate} - {currentDatePlusOffset}, bugs quantity: {len(tempBugs)}")
+  
+  currentDate = currentDatePlusOffset + pd.DateOffset(days=1)
 
-print(f"\nTotal de bugs: {len(bugs)}")
+print(f"\nTotal: {len(bugs)}")
 
-with open('bugs_id_with_lct-final.json', 'w') as outfile:
-        json.dump(bugs, outfile)
+with open('data\\bugs_id_lct_final.json', 'w') as outfile:
+  json.dump(bugs, outfile)
